@@ -1,7 +1,11 @@
 import streamlit as st
 import requests
 
-API_URL = "http://127.0.0.1:8000"
+try:
+    API_URL = st.secrets["API_URL"]
+
+except (FileNotFoundError, KeyError):
+    API_URL = "http://127.0.0.1:8000"
 
 with st.sidebar:
     st.header("🤖 Model Insights")
