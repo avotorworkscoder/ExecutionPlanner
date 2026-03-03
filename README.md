@@ -1,221 +1,179 @@
-# ExecutionPlanner
-Web app to create and track Your Goals divided into manageable tasks.
+<h1 align="center">
+  🚀 Execution Planner
+</h1>
 
-# 🚀 Execution Planner – AI-Powered Goal Breakdown & Execution Tracker
+<p align="center">
+  <strong>An AI-Powered Goal Breakdown & Execution Tracker</strong><br>
+  Turn high-level, vague goals into actionable, trackable micro-steps using Generative AI.
+</p>
 
-A production-style full-stack ML web application that converts high-level goals into structured execution plans using an LLM, and tracks real-world task completion with analytics-ready logs.
-
-Built with:
-- 🧠 FastAPI (Backend API)
-- 🎨 Streamlit (Frontend UI)
-- 🤖 OpenAI LLM (Task Decomposition)
-- 🗄 SQLite (Persistent Storage)
-- 🔄 RESTful Architecture
-
----
-
-## 🧩 Problem
-
-Most people set ambitious goals but struggle with:
-- Breaking them into actionable steps
-- Tracking execution consistency
-- Recording problems & insights
-- Measuring performance over time
-
-Execution Planner solves this by turning vague goals into structured, trackable execution systems.
+<p align="center">
+  <!-- Place your badges here. Example: -->
+  <!-- <img alt="License" src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"> -->
+  <!-- <img alt="Python Version" src="https://img.shields.io/badge/Python-3.9%2B-blue"> -->
+</p>
 
 ---
 
-## 💡 Solution
-
-Users enter a goal →  
-The LLM generates small, achievable tasks →  
-Tasks are stored in a database →  
-Users log:
-- ⏱ Time spent
-- ⚠ Problems faced
-- 💡 Insights gained
-- ✅ Completion status
-
-All data is persistent and structured for future analytics.
+## 📖 Table of Contents
+1. [Introduction](#1-introduction)
+2. [Features](#2-features)
+3. [Installation](#3-installation)
+4. [Codebase Guide](#4-codebase-guide)
+5. [Collaboration Guide](#5-collaboration-guide)
+6. [Future Roadmap](#6-future-roadmap)
+7. [Contact Us](#7-contact-us)
 
 ---
 
-## 🏗 Architecture
-Streamlit Frontend
-↓
-FastAPI Backend
-↓
-LLM Service Layer
-↓
-SQLite Database
+## 1. Introduction
 
+Most people set ambitious goals but struggle with execution. **Execution Planner** is a production-grade full-stack Machine Learning web application designed to solve this by turning vague aspirations into structured execution systems.
 
-### Backend
-- RESTful API
-- Structured Pydantic schemas
-- SQLAlchemy ORM
-- LLM JSON output enforcement
+By leveraging an LLM (Large Language Model), it automatically decomposes large tasks into 5-15 manageable tasks, and further breaks those down into 3-5 distinct micro-steps. It also seamlessly tracks your time spent, problems faced, insights gained, and completion status—providing structured data for future behavioral analytics.
 
-### Frontend
-- Clean execution UI
-- Goal creation
-- Task completion logging
-- Real-time API interaction
+<!-- Add a screenshot or demo GIF here -->
+<!-- Example: `![Execution Planner Demo](./assets/demo.gif)` -->
 
 ---
 
-## 📁 Project Structure
+## 2. Features
+
+- **🧠 AI-Powered Breakdown:** Generates structured tasks and micro-subtasks using advanced LLMs (Gemma, Gemini).
+- **🗄 Persistent Storage:** Reliable tracking via a dedicated SQLite database using SQLAlchemy ORM.
+- **⏱ Time & Insight Tracking:** Log time spent (in minutes), blockers, and personal insights per task.
+- **🎨 Interactive UI:** Clean, intuitive Streamlit-based frontend for goal management.
+- **⚙️ RESTful API:** Robust FastAPI backend enforcing strict JSON responses from the LLM.
+
+---
+
+## 3. Installation
+
+Follow these steps to set up the project locally on your machine.
+
+### Prerequisites
+- Python 3.9+ installed
+- [Git](https://git-scm.com/) installed
+- API Key (e.g., Gemini API Key from Google AI Studio)
+
+### Step 1: Clone the Repository
+```bash
+git clone <YOUR-REPO-URL-HERE>
+cd execution_planner
+```
+
+### Step 2: Set up the Backend (FastAPI)
+Open a terminal and navigate to the backend directory:
+```bash
+cd backend
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Create a .env file and add your API key
+# Example content for .env:
+# GEMINI_API_KEY="your_actual_api_key_here"
+```
+
+Start the FastAPI local server:
+```bash
+uvicorn main:app --reload
+```
+*The API will be available at `http://127.0.0.1:8000`. You can visit `http://127.0.0.1:8000/docs` to view the interactive Swagger API documentation.*
+
+### Step 3: Set up the Frontend (Streamlit)
+Open a *new* terminal window and navigate to the frontend directory:
+```bash
+cd frontend
+
+# Install dependencies (if not already done globally)
+pip install -r requirements.txt
+
+# Run the Streamlit UI
+streamlit run app.py
+```
+*The Streamlit web app will open automatically in your browser (usually at `http://localhost:8501`).*
+
+---
+
+## 4. Codebase Guide
+
+The project strictly follows a decoupled client-server architecture. Here is a high-level overview of the most critical files to help you navigate:
+
+```text
 execution_planner/
 │
-├── backend/
-│ ├── main.py
-│ ├── database.py
-│ ├── models.py
-│ ├── schemas.py
-│ ├── llm_service.py
-│ └── requirements.txt
+├── backend/                  # ⚙️ Python FastAPI Backend Service
+│ ├── main.py               # The core API entry point and route definitions.
+│ ├── database.py           # Database engine & session configurations.
+│ ├── models.py             # SQLAlchemy ORM models (Goal, Task, SubTask).
+│ ├── schemas.py            # Pydantic schemas for data validation and serialization.
+│ ├── llm_service.py        # Abstracted LLM communication (OpenAI client configured for Gemini/Gemma).
+│ └── requirements.txt      # Backend Python dependencies.
 │
-├── frontend/
-│ ├── app.py
-│ └── requirements.txt
+├── frontend/                 # 🎨 Python Streamlit Frontend Client
+│ ├── app.py                # Main user interface, state management, and API caller.
+│ └── requirements.txt      # Frontend Python dependencies.
 │
-└── README.md
-└── LICENSE
-└── gitignore
+├── LICENSE                   # Apache 2.0 Open Source License
+└── README.md                 # You are reading this!
+```
+
+### Key Technical Patterns
+- **Database Modeling:** We use `SQLAlchemy` for handling one-to-many relationships (Goals -> Tasks -> Subtasks).
+- **Data Serialization:** `Pydantic` models (`schemas.py`) define exactly what data is expected in requests and responses.
+- **LLM Prompting Structure:** Due to limitations in certain models (like Gemma), the `system` prompt roles and strict JSON formatting options have been creatively adapted directly into the `user` prompts to maintain high reliability (`llm_service.py`).
 
 ---
 
-## ⚙️ Setup & Run Locally
+## 5. Collaboration Guide
 
-### 1️⃣ Clone Repository
+We welcome contributions of all kinds: bug reports, feature suggestions, or pull requests! To ensure a smooth collaborative environment, please follow these guidelines:
 
-git clone <your-repo-url>
-cd execution_planner
+### How to Contribute
+1. **Fork the Repository:** Create your own fork on GitHub.
+2. **Clone the Fork locally:** Pull the code to your machine.
+3. **Create a Feature Branch:** Always branch off `main` for your work.
+   ```bash
+   git checkout -b feature/your-awesome-feature
+   ```
+4. **Follow Coding Standards:**
+   - Keep functions modular and clearly documented.
+   - Separate API logic (backend) from UI logic (frontend).
+   - Test your changes locally to ensure `uvicorn` and `streamlit` boot without errors.
+5. **Commit Meaningfully:** Write clear, concise commit messages.
+6. **Submit a Pull Request (PR):** Push your branch up and open a PR directed at our `main` branch. Provide a detailed explanation of your changes.
 
----
-
-### 2️⃣ Backend Setup
-
-cd backend
-pip install -r requirements.txt
-
-Create `.env` file:
-OPENAI_API_KEY=your_api_key_here
-
-Run backend:
-uvicorn main:app --reload
-
-Visit API docs:
-http://127.0.0.1:8000/docs
-
----
-
-### 3️⃣ Frontend Setup
-
-Open new terminal:
-
-cd frontend
-pip install -r requirements.txt
-streamlit run app.py
-
-
-App will open in your browser.
+### Reporting Bugs
+If you find a bug, please create an Issue and include:
+- A descriptive title.
+- Steps to reproduce the bug.
+- The expected vs. actual behavior.
 
 ---
 
-## 🔍 API Endpoints
+## 6. Future Roadmap
 
-| Method | Endpoint | Description |
-|--------|----------|------------|
-| POST | /goals | Create goal & auto-generate tasks |
-| GET | /goals | Fetch all goals |
-| PUT | /tasks/{id} | Mark task complete & log execution |
-
----
-
-## 📊 Features
-
-- ✅ LLM-based structured task generation
-- 🗄 Persistent database storage
-- ⏱ Time tracking per task
-- ⚠ Problem logging
-- 💡 Insight capture
-- 🔁 Status updates
-- 📘 Interactive API documentation
-- 🧱 Clean separation of concerns
-- 🚀 Production-style backend architecture
+- [ ] Implement robust User Authentication (JWT).
+- [ ] Add Multi-user support with isolated databases.
+- [ ] Build a comprehensive execution analytics dashboard.
+- [ ] Dockerize the application for easier deployment.
+- [ ] Integration with background task queues (Celery/Redis) for asynchronous processing.
 
 ---
 
-## 🧠 Technical Highlights
+## 7. Contact Us
 
-- Enforced JSON schema from LLM responses
-- ORM-based DB layer
-- Modular backend structure
-- Clean service-layer separation
-- Scalable design (ready for PostgreSQL / auth / Docker)
+We are excited about the future of **Execution Planner**! If you have any questions, feedback, or want to reach out for a collaboration:
 
----
-
-## 🔒 Assumptions
-
-- Single-user local testing version
-- SQLite for simplicity
-- LLM availability via OpenAI API
+- **Lead Developer/Maintainer:** [Your Name / Alias]
+- **Email:** [Your Email Address]
+- **LinkedIn:** [Link to your Profile]
+- **Twitter / X:** [@YourHandle](https://twitter.com/)
+- **Project Link:** [Insert URL if hosted or GitHub URL]
 
 ---
 
-## ⚠ Limitations
-
-- No authentication (extendable)
-- No background task queue
-- No analytics scoring engine yet
-- No deployment configuration included
-
----
-
-## 🚀 Future Improvements
-
-- JWT authentication
-- Multi-user support
-- Execution analytics dashboard
-- Goal versioning
-- Docker deployment
-- Cloud hosting
-- Rate limiting & caching
-- Weekly performance summaries
-
----
-
-## 🎯 Why This Project Matters
-
-This project demonstrates:
-
-- Full-stack ML system design
-- LLM integration with structured outputs
-- REST API development
-- Database modeling
-- Clean software architecture
-- Real-world execution tracking system
-
-It moves beyond “model training” and into **production-oriented ML system building**.
-
----
-
-## 📽 Suggested Demo Flow
-
-1. Create goal
-2. Show LLM task breakdown
-3. Complete task
-4. Log insights
-5. Show API docs
-6. Explain architecture
-
----
-
-## 🏁 Author
-
-Built as a portfolio-grade ML systems project demonstrating end-to-end architecture, automation mindset, and scalable backend design.
-
----
+<p align="center">
+  <i>Built with ❤️ as a portfolio-grade ML Systems Project.</i>
+</p>
